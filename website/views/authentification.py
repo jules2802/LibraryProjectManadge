@@ -71,7 +71,7 @@ def login():
             else:
                 flash('Incorrect password', category='error')
         else:
-            flash('This email is not linked to an account')
+            flash('This email is not linked to an account', category='error')
 
     return render_template('login.html', user=current_user)
 
