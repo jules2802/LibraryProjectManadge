@@ -1,0 +1,36 @@
+{% extends "header.html" %} {% block title %}Add a book{% endblock %} {% block content %}
+    </br>
+    <table class="table table-striped table-hover table-sm " xmlns="http://www.w3.org/1999/html">
+        <caption style="caption-side: top; text-align: center;">Inventory</caption>
+        <thead class="thead-light">
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Location</th>
+            <th colspan="2" style="text-align: center; width: 25%">New location</th>
+            <th>Submit</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in inventory %}
+            <tr>
+                <th>{{ book.title }}</th>
+                <th>{{ book.author }}</th>
+                <th>{{ book.row_letter }}-{{ book.row_number }}</th>
+                <form method="post">
+                    <th>
+                        <input type="text" class="form-control" id="rowLetter" name="rowLetter" placeholder="Letter"/>
+                    </th>
+                    <th><input type="number" class="form-control" id="rowNumber" name="rowNumber" placeholder="Number"/>
+                    </th>
+                    <th>
+                        <input type="submit" value="Modify" class="btn btn-primary"></input>
+                        <input type="hidden" name="book" value="{{ book.id }}">
+                    </th>
+                </form>
+            </tr>
+            </tbody>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

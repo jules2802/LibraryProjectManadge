@@ -1,5 +1,5 @@
 {% extends "header.html" %} {% block title %}Add a book{% endblock %} {% block content %}
-    <form method="POST">
+    <form method="POST" >
         <h3 align="center">Add a new book</h3>
         <div class="form-group">
             <label for="title">Title</label>
@@ -95,14 +95,3 @@
     </table>
 {% endblock %}
 
-{% if user.is_authenticated %}
-    <a class="nav-item nav-link" id="home" href="/home">Home</a>
-    {% if user.special_access %}
-        <a class="nav-item nav-link" id="addBook" href="/add-book">Add a book</a>
-    {% endif %}
-    <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
-
-{% else %}
-    <a class="nav-item nav-link" id="login" href="/login">Login</a>
-    <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
-{% endif %}

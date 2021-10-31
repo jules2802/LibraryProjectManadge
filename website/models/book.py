@@ -11,3 +11,6 @@ class Book(db.Model):
     available = db.Column(db.Boolean, default=False)
 
 
+def location_is_used(row_letter, row_number):
+    return True if Book.query.filter_by(row_letter=row_letter, row_number=row_number).first() else False
+

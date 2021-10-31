@@ -1,11 +1,11 @@
-from flask import request, render_template, flash, url_for, redirect, Blueprint
+from flask import request, render_template, flash, url_for, redirect
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import app
 from website import db
 from website.models.user import User
-from website.views import v1
+from website.views.interface import v1
 
 
 @v1.route('/sign-up', methods=['GET', 'POST'])
@@ -43,14 +43,14 @@ def sign_up():
             db.session.add(new_user)
             db.session.commit()
             flash('New user with special access registered')
-            return redirect((url_for('__init__.login')))
+            return redirect((url_for('v1.login')))
         else:
             new_user = User(email=email, firstname=first_name, lastname=last_name,
                             password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             flash('New user registered', category='success')
-            return redirect(url_for('__init__.login'))
+            return redirect(url_for('v1.login'))
 
     return render_template('sign_up.html', user=current_user)
 
@@ -66,7 +66,7 @@ def login():
             if check_password_hash(user.password, password=password):
                 login_user(user, remember=True)
                 flash('You logged in successfully', category='success')
-                return redirect(url_for('__init__.home_page'))
+                return redirect(url_for('v1.home_page'))
                 
             else:
                 flash('Incorrect password', category='error')
@@ -80,5 +80,5 @@ def login():
 def logout():
     logout_user()
     flash('You have been looged out', category='success')
-    return redirect(url_for('__init__.login'))
+    return redirect(url_for('v1.login'))
 
