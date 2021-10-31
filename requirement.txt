@@ -1,0 +1,6 @@
+pytest
+flask
+flask_login
+werkzeug
+datetime
+sqlalchemy
