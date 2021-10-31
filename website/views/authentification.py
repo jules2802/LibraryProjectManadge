@@ -52,7 +52,10 @@ def sign_up():
             flash('New user registered', category='success')
             return redirect(url_for('v1.login'))
 
-    return render_template('sign_up.html', user=current_user)
+        return render_template('sign_up.html', user=current_user), 400
+
+    if request.method=='GET':
+        return render_template('sign_up.html', user=current_user), 200
 
 
 @v1.route('/login', methods=['GET', 'POST'])
@@ -73,7 +76,10 @@ def login():
         else:
             flash('This email is not linked to an account', category='error')
 
-    return render_template('login.html', user=current_user)
+        return render_template('login.html', user=current_user), 400
+
+    if request.method == 'GET':
+        return render_template('login.html', user=current_user)
 
 @v1.route('/logout')
 @login_required

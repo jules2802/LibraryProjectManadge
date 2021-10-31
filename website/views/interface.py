@@ -18,6 +18,7 @@ def home_page():
 @v1.route('/add-book', methods=['GET', 'POST'])
 @login_required
 def add_book():
+    inventory = Book.query.all()
     if request.method == 'POST':
 
         title = request.form['title']
@@ -129,7 +130,7 @@ def find_book():
             return render_template('find_book.html', inventory=search_result, user=current_user)
 
     ##rent a book
-    if request.method == 'POST' and request.form['Borrow']:
+    if request.method == 'POST' and request.form['borrow']:
         book_id = request.form['book']
 
         book = Book.query.filter_by(id=book_id).first()
@@ -148,7 +149,7 @@ def find_book():
         db.session.add(new_booking)
         db.session.commit()
 
-        print(new_booking)
+
 
         flash(f'You successfully borrow the book: {book.title} of {book.author}')
 
@@ -158,9 +159,21 @@ def find_book():
 @v1.route("/booking", methods=['GET','POST'])
 @login_required
 def booking():
-    if current_user.special_access:
+    if request.method == 'POST' and request.form['Return']:
+        booking_id = request.form['booking']
+        booking = Booking.query.filter_by(id=booking_id).first()
+        returned_book = Book.query.filter_by(id=booking.book_id).first()
+        returned_book.available = True
+
+        db.session.delete(booking)
+        db.session.commit()
+
+    if current_user.special_access: ##Allow the special user to see everyone's bookings
         all_bookings = Booking.query.all()
         return render_template('booking.html', user=current_user, bookings=all_bookings)
+
     else:
         my_bookings = Booking.query.filter_by(user_id=current_user.id)
         return render_template('booking.html', user=current_user, bookings=my_bookings)
+
+

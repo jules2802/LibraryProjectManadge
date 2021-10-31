@@ -21,7 +21,13 @@
             <th>{{ booking.user_firstname }}</th>
             <th>{{ booking.user_lastname }}</th>
             <th>{{ booking.book_title }}</th>
-            <th>{{ booking.book_author }}
+            <th>{{ booking.book_author }}</th>
+            <th>
+                <form method="post">
+                    <input type="submit" name="Return" value="Return" class="btn btn-primary">
+                    <input type="hidden" name="booking" value="{{ booking.id }}">
+                </form>
+            </th>
         {% endfor %}
         </tbody>
     </table>
