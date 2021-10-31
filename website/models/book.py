@@ -1,7 +1,10 @@
+from sqlalchemy.orm import relationship
+
 from website import db
 
 
 class Book(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(1000))
     author = db.Column(db.String(1000))
@@ -9,6 +12,8 @@ class Book(db.Model):
     row_letter = db.Column(db.String(10))
     row_number = db.Column(db.Integer)
     available = db.Column(db.Boolean, default=False)
+
+
 
 
 def location_is_used(row_letter, row_number):

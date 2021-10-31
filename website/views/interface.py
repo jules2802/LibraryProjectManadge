@@ -5,11 +5,12 @@ from sqlalchemy import and_, or_, text
 
 from website import db
 from website.models.book import Book, location_is_used
+from website.models.booking import Booking
 
 v1 = Blueprint('v1', __name__)
 
 
-@v1.route('/home', methods=['GET', 'POST'])
+@v1.route('/', methods=['GET', 'POST'])
 def home_page():
     return render_template('home.html', user=current_user)
 
@@ -51,6 +52,7 @@ def add_book():
 
 
 @v1.route('/change-location', methods=['GET', 'POST'])
+@login_required
 def change_location():
     if request.method == 'POST':
         row_letter = request.form['rowLetter']
@@ -77,11 +79,12 @@ def change_location():
 
 
 @v1.route('/find-book', methods=['GET', 'POST'])
+@login_required
 def find_book():
     ##search a book
     if request.method == 'POST' and 'search' in request.form:
         query = ''
-        and_operator = False ## And operator for SQL Query
+        and_operator = False  ## And operator for SQL Query
 
         title = request.form['title']
         author = request.form['author']
@@ -131,10 +134,33 @@ def find_book():
 
         book = Book.query.filter_by(id=book_id).first()
         book.available = False
+
+        new_booking = Booking(book_id=book_id,
+                              book_title=book.title,
+                              book_author=book.author,
+                              book_publication_date=book.publication_date,
+                              book_row_letter=book.row_letter,
+                              book_row_number=book.row_number,
+                              user_id=current_user.id,
+                              user_email=current_user.email,
+                              user_firstname=current_user.firstname,
+                              user_lastname=current_user.lastname)
+        db.session.add(new_booking)
         db.session.commit()
+
+        print(new_booking)
+
         flash(f'You successfully borrow the book: {book.title} of {book.author}')
-
-
 
     inventory = Book.query.all()
     return render_template('find_book.html', inventory=inventory, user=current_user)
+
+@v1.route("/booking", methods=['GET','POST'])
+@login_required
+def booking():
+    if current_user.special_access:
+        all_bookings = Booking.query.all()
+        return render_template('booking.html', user=current_user, bookings=all_bookings)
+    else:
+        my_bookings = Booking.query.filter_by(user_id=current_user.id)
+        return render_template('booking.html', user=current_user, bookings=my_bookings)

@@ -32,12 +32,14 @@
     <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
             {% if user.is_authenticated %}
-                <a class="nav-item nav-link" id="home" href="/home">Home</a>
+                <a class="nav-item nav-link" id="home" href="/">Home</a>
                 {% if user.special_access %}
                     <a class="nav-item nav-link" id="addBook" href="/add-book">Add a book</a>
                     <a class="nav-item nav-link" id="changeLocation" href="/change-location">Book Location</a>
+
                 {% endif %}
                 <a class="nav-item nav-link" id="findBook" href="/find-book">Find a book</a>
+                <a class="nav-item nav-link" id="booking" href="/booking">Booking</a>
                 <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
 
             {% else %}
